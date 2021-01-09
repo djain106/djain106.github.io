@@ -21,15 +21,11 @@ hr {
 }
 
 .intro-code pre {
-    background-color: black;
-    padding: 10px;
-    padding-left: 20px;
     border: white 1px solid;
 }
 
 code {
     white-space: normal;
-    color: white !important;
 }
 
 .icons {
@@ -53,10 +49,11 @@ code {
 }
 
 .intro-code {
-    width: 30%;
+    width: 50%;
     margin: auto;
     padding: 20px;
     min-width: 400px;
+    max-width: 800px;
 }
 
 .name {

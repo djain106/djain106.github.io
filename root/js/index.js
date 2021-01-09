@@ -1,5 +1,23 @@
+window.addEventListener("deviceorientation", handleOrientation, true);
+
+function handleOrientation(event) {
+    // var absolute = event.absolute;
+    var alpha = Math.abs(event.alpha);
+    var beta = Math.abs(event.beta);
+    var gamma = Math.abs(event.gamma);
+
+    var r = alpha * (360 / 255) % 255, g = beta * (360 / 255) % 255, b = gamma * (360 / 255) % 255;
+    const page = document.body;
+    page.style.backgroundColor = `rgb(${r + "," + g + "," + b})`;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
-    fixCodeColoring();
+    hljs.configure({
+        tabReplace: ''
+    });
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+    });
     typeCode();
 }, false);
 
