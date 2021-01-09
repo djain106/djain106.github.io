@@ -52,7 +52,7 @@ code {
 
 @media only screen and (max-width: 650px) {
 
-    .name {
+    .page {
         text-align: center;
         padding-top: 30px;
         padding-left: 30px;
@@ -65,5 +65,3 @@ code {
         width: 500px;
     }
 }
-
-@media only screen and (max-width: 650px) {}
