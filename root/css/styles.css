@@ -34,6 +34,7 @@ code {
     width: 30%;
     margin: auto;
     padding: 20px;
+    min-width: 400px;
 }
 
 .name {
@@ -41,6 +42,7 @@ code {
     font-size: 100px;
     text-shadow: 6px 3px 3px #006;
     text-align: center;
+    padding-top: 30px;
 }
 
 .typed-cursor {
@@ -48,7 +50,14 @@ code {
     font-size: 20px;
 }
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 650px) {
+
+    .name {
+        text-align: center;
+        padding-top: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 
     .intro-code {
         display: flex;
@@ -56,3 +65,5 @@ code {
         width: 500px;
     }
 }
+
+@media only screen and (max-width: 650px) {}

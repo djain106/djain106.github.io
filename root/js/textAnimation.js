@@ -4,7 +4,7 @@ var options = {
     typeSpeed: 90,
     backSpeed: 70,
     loop: true,
-    smartBackspace: false
+    smartBackspace: false,
 };
 
 var typed = new Typed('#typed', options);
