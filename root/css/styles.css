@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;200&display=swap');
 
 * {
     margin: 0;
@@ -12,12 +12,22 @@ body {
 }
 
 hr {
-    width: 75%;
     align-self: center;
     margin: auto;
     height: 2px;
     background-color: rgb(243, 233, 210);
     box-shadow: 6px 3px 3px #006;
+}
+
+.content {
+    margin: auto;
+    width: 65%;
+    max-width: 1000px;
+}
+
+a {
+    text-decoration: none !important;
+    color: rgb(243, 233, 210);
 }
 
 .intro-code pre {
@@ -43,22 +53,14 @@ code {
     font-size: 35px;
 }
 
-.icons a {
-    text-decoration: none;
-    color: rgb(243, 233, 210);
-}
-
 .intro-code {
-    width: 50%;
     margin: auto;
-    padding: 20px;
-    min-width: 400px;
-    max-width: 800px;
+    padding-top: 10px;
 }
 
 .name {
     color: rgb(243, 233, 210);
-    font-size: 100px;
+    font-size: 80px;
     text-shadow: 6px 3px 3px #006;
     margin: auto;
     padding-top: 30px;
@@ -70,30 +72,45 @@ code {
     font-size: 20px;
 }
 
-.construction {
-    text-align: center;
-    font-size: 50px;
+.projects {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    color: #006;
 }
 
-/* Code Styling */
-
-.variable_type {
-    color: rgb(46, 95, 255);
+.project {
+    background-color: rgb(243, 233, 210);
+    border-radius: 10px;
+    padding: 15px 25px;
+    margin-top: 20px;
 }
 
-.string {
-    color: rgb(255, 158, 40);
+.projects a {
+    color: black;
+    text-decoration: underline dotted black !important;
 }
 
-.variable_name {
-    color: deepskyblue;
+.projects p a {
+    color: #006;
+    text-decoration: underline #006 !important;
 }
 
-.comment {
-    color: green;
+.page-section {
+    color: rgb(243, 233, 210);
+    margin-bottom: 0;
+}
+
+.underline {
+    text-decoration: underline;
 }
 
 @media only screen and (max-width: 650px) {
+    .content {
+        width: 100%;
+    }
 
     hr {
         width: 90%;
@@ -101,19 +118,23 @@ code {
 
     .header {
         text-align: center;
-        padding: 30px 30px 0 30px;
-    }
-
-    .intro-code {
-        width: 400px;
+        padding: 2% 2% 0 2%;
     }
 
     .name {
         text-align: center;
     }
 
+    .intro-code {
+        width: 90%;
+    }
+
     .icons {
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .projects {
+        width: 90%;
     }
 }
