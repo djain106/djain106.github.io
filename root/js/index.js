@@ -80,7 +80,7 @@ function init() {
 
     const loader = new THREE.GLTFLoader();
 
-    loader.load('root/assets/room.glb', function (gltf) {
+    loader.load('root/assets/room.gltf', function (gltf) {
         const scale = new THREE.Vector3(10, 10, 10);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         scene.add(gltf.scene);
