@@ -89,6 +89,7 @@ function init() {
         // console.log(gltf.cameras[1]);
         // camera = gltf.cameras[1].clone();
     }, undefined, function (error) {
+        console.log('failed')
         console.error(error);
     });
 
