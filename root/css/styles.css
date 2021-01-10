@@ -67,6 +67,15 @@ code {
     font-size: 35px;
 }
 
+.icons p {
+    display: none;
+}
+
+.icons p:hover {
+    cursor: pointer;
+    color: #0056b3;
+}
+
 .intro-code {
     margin: auto;
     padding-top: 10px;

@@ -10,6 +10,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"
+        integrity="sha512-jeYvJdyAYkpQCY/omvCYQo89qA5YxDW4JBT7COPsHT2sOAanwxkZRFeP9gc69b5reSDpZIoyCqZQZcWZkbB5Gw=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/three@0.124.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/three@0.124.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="root/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="root/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="root/images/favicon-32x32.png">
@@ -23,19 +29,17 @@
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"
-        integrity="sha512-jeYvJdyAYkpQCY/omvCYQo89qA5YxDW4JBT7COPsHT2sOAanwxkZRFeP9gc69b5reSDpZIoyCqZQZcWZkbB5Gw=="
-        crossorigin="anonymous"></script>
     <div id="animation"></div>
     <div class="content">
         <div class="header">
             <h1 class="name">Daksh Jain</h1>
             <hr>
             <div class="icons">
-                <a href="https://github.com/djain106" alt="GitHub"><i class="fab fa-github-square"></i>github /</a>
-                <a href="https://www.linkedin.com/in/daksh-j/" alt="LinkedIn"><i class="fab fa-linkedin"></i>linkedin
-                    /</a>
-                <a href="https://djain.dev/resume.pdf" alt="Resume"><i class="fas fa-file"></i>resume /</a>
+                <a href="https://github.com/djain106" alt="GitHub"><i class="fab fa-github-square"></i>github/</a>
+                <a href="https://www.linkedin.com/in/daksh-j/" alt="LinkedIn"><i class="fab fa-linkedin"></i>linkedin/
+                </a>
+                <a href="https://djain.dev/resume.pdf" alt="Resume"><i class="fas fa-file"></i>resume/</a>
+                <p id="activate_animation" onclick="activateAnimation()"><i class="fas fa-mouse"></i>click_me/</p>
             </div>
         </div>
         <div class="intro-code">
