@@ -38,18 +38,22 @@ function animateBackground() {
 
     // Scene
     scene = new THREE.Scene();
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    const backgroundColor = new THREE.Color("rgb(10, 10, 10)");
+    scene.background = backgroundColor;
 
-    camera.position.z = 5;
+    const geometry = new THREE.SphereGeometry(3, 32, 32);
+    const material = new THREE.MeshBasicMaterial({ color: "white" });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    camera.position.z = 20;
 
     const animate = function () {
         requestAnimationFrame(animate);
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+        camera.rotation.x += 0.02;
+        camera.rotation.y += 0.02;
+        // sphere.rotation.x += 0.01;
+        // sphere.rotation.y += 0.01;
 
         renderer.render(scene, camera);
     };
@@ -87,7 +91,7 @@ function onWindowResize() {
 
     camera.updateProjectionMatrix();
 
-    renderer.setSize(window.innerWidth - 10, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     render();
 

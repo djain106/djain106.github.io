@@ -11,7 +11,12 @@ body {
     font-family: 'Roboto Mono', monospace;
     color: rgb(243, 233, 210);
     margin: 0;
-    padding-bottom: 200px;
+    -ms-overflow-style: none;
+    scrollbar-width: none
+}
+
+body::-webkit-scrollbar {
+    display: none;
 }
 
 hr {
@@ -146,41 +151,4 @@ code {
     .projects {
         width: 90%;
     }
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    background-color: rgb(243, 233, 210);
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
-}
-
-::-webkit-scrollbar:hover {
-    background-color: rgb(180, 173, 158);
-}
-
-/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
-::-webkit-scrollbar-thumb:vertical {
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:vertical:active {
-    background: rgba(0, 0, 0, 0.61);
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:horizontal {
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
-}
-
-::-webkit-scrollbar-thumb:horizontal:active {
-    background: rgba(0, 0, 0, 0.61);
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
 }
