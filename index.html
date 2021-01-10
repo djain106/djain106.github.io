@@ -10,8 +10,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
-    <!-- and it's easy to individually load additional languages -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/languages/go.min.js"></script> -->
     <script src="root/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="root/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="root/images/favicon-32x32.png">
@@ -19,10 +17,16 @@
     <link rel="manifest" href="root/images/site.webmanifest">
     <title>Daksh Jain</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="description" content="Daksh Jain's Personal Website">
 </head>
 
 <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"
+        integrity="sha512-jeYvJdyAYkpQCY/omvCYQo89qA5YxDW4JBT7COPsHT2sOAanwxkZRFeP9gc69b5reSDpZIoyCqZQZcWZkbB5Gw=="
+        crossorigin="anonymous"></script>
+    <div id="animation"></div>
     <div class="content">
         <div class="header">
             <h1 class="name">Daksh Jain</h1>
@@ -35,33 +39,41 @@
             </div>
         </div>
         <div class="intro-code">
-            <h3>aboutMe.js</h3>
+            <h2>aboutMe.js</h2>
             <pre><code class="lang-js">> const DAKSH_JAIN = <span id="typed" style="color: #D69D85;"></span>;
         <br>> var interests = ["Software Engineering", "Machine Learning", "Fullstack Development"];
         <br>> var now = "Working on Gambit!"; <a style="text-decoration: none;" href="https://github.com/djain106/gambit">//Click Me!</span></a>
         <br>> var book</code></pre>
         </div>
-        <div class="projects">
+        <section class="projects">
             <h1 class="page-section">Projects</h1>
-            <div id="1" class="project">
+            <article id="1" class="project">
                 <h2><a href="https://github.com/djain106/gambit">Gambit</a></h2>
                 <p><span class="underline">Technologies</span>: MongoDB, Express, React, Node
                     <br><span class="underline">Languages</span>: JavaScript, HTML, CSS
-                    <br><span class="underline">About</span>: A React application that I used to teach myself more about
+                    <br><span class="underline">About</span>: A React application that I used to teach myself more
+                    about
                     modern day frameworks and how to create my own fullstack applications. This projects implements
                     user authentication through login and has common gambling games including BlackJack,
                     Roulette, and Slots.
                 </p>
-            </div>
-            <div id="2" class="project">
-                <h2><a href="">TF-IDF</a></h2>
+            </article>
+            <article id="2" class="project">
+                <h2><a href="https://github.com/djain106/tf-idf">TF-IDF</a></h2>
                 <p>
                     <span class="underline">Languages</span>: Python
                     <br><span class="underline">About</span>: This project implements the <a class="underline"
                         href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Term Frequency - Inverse Document
-                        Frequency</a> search algorithm on provided text documents.
+                        Frequency</a> search algorithm on provided text documents. This algorithm weights words
+                    based on
+                    the number of times it appears in the document with the inverse of the times the word appears in
+                    the
+                    total collection of documents.
                 </p>
-            </div>
+            </article>
+        </section>
+        <div class="contact">
+
         </div>
     </div>
 </body>
