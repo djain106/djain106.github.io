@@ -16,7 +16,7 @@
     </script>
     <script src="https://unpkg.com/three@0.124.0/examples/js/controls/OrbitControls.js"></script>
     <script src="https://unpkg.com/three@0.124.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="root/js/index.js"></script>
+    <script type="module" src="root/js/index.js"></script>
     <link rel="apple-touch-icon" sizes="180x180" href="root/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="root/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="root/images/favicon-16x16.png">
@@ -28,8 +28,12 @@
 </head>
 
 <body>
-    <div id="animation"></div>
-    <div class="content">
+    <div id="buttons">
+        <button>Go Back</button>
+    </div>
+    <div id="animation">
+    </div>
+    <div id="content" class="content">
         <div class="header">
             <header class="name">Daksh Jain</header>
             <hr>
@@ -38,7 +42,7 @@
                 <a href="https://www.linkedin.com/in/daksh-j/" alt="LinkedIn"><i
                         class="fab fa-linkedin"></i>linkedin</a>/
                 <a href="https://djain.dev/resume.pdf" alt="Resume"><i class="fas fa-file"></i>resume</a>/
-                <p id="activate_animation" onclick="activateAnimation()"><i class="fas fa-play"></i>play</p>/
+                <p id="activate_animation"><i class="fas fa-play"></i>play</p>
             </div>
         </div>
         <div class="intro-code">
@@ -98,7 +102,8 @@
                     of disease." After speaking with a professor about this topic more, I learned more about the possible correlation that may exist between the 
                     microbiome of a person and the likeliness/chance they may have a disease. So far, I have used MATLAB to create a prelimenary identifier that 
                     detects if there is a positive, negative, or no correlation between the data. From these results, there seems to be some trends towards certain
-                    microbes having a strong correlation between the probability the person will acquire an illness. 
+                    microbes having a strong correlation between the probability the person will acquire an illness. I have taken a course on Machine Learning
+                    and continuing to learn more to determine the best selection of tools for this task.
                 </p>
             </article>
         </section>

@@ -1,10 +1,9 @@
-let mesh, renderer, scene, camera, controls;
-
 document.addEventListener('DOMContentLoaded', function () {
     highlight();
     type();
     init();
-    window.addEventListener('resize', onWindowResize, false);
+    document.getElementById('activate_animation').onclick = activateAnimation;
+    document.getElementById('buttons').onclick = hideAnimation;
 }, false);
 
 // Highlight code block with JS syntax
@@ -32,13 +31,21 @@ function type() {
 }
 
 function activateAnimation() {
-    document.getElementById('animation').style.zIndex = 1;
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('buttons').style.display = 'flex';
+}
+
+function hideAnimation() {
+    document.getElementById('content').style.display = '';
+    document.getElementById('buttons').style.display = 'none';
 }
 
 // Three JS animation
 function init() {
     // Constants
     const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+    // Variables
+    let mesh, renderer, scene, camera, controls;
 
     // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -66,22 +73,21 @@ function init() {
     scene.fog = fog;
 
     // Load Computer
-    const loader = new THREE.GLTFLoader();
+    const computer = new THREE.GLTFLoader();
     let group;
-    loader.load('root/assets/scene.gltf', function (gltf) {
+    computer.load('root/assets/scene.gltf', function (gltf) {
         // Desktop Computer by Tyler P Halterman is licensed under Creative Commons Attribution
         const scale = new THREE.Vector3(2, 2, 2);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
-        scene.add(gltf.scene);
-        render();
         group = gltf.scene;
-        group.position.y += 1.285;
+        group.position.y += 1.30;
         group.traverse(function (object) {
             if (object.isMesh) object.castShadow = true;
         });
+        scene.add(group);
         document.getElementById('activate_animation').style.display = "inline";
     }, undefined, function (error) {
-        console.log('Loading alternative animation...');
+        animationDiv.style.display = "none";
         console.error(error);
     });
 
@@ -102,7 +108,7 @@ function init() {
     scene.add(dirLight);
 
     // Ground
-    const mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(50, 50), new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(50, 50), new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
@@ -114,38 +120,53 @@ function init() {
     const gridHelper = new THREE.GridHelper(size, divisions);
     scene.add(gridHelper);
 
+    // Screen
+    const screen = new THREE.ImageBitmapLoader();
+    screen.setOptions({ imageOrientation: 'flipY' });
+    screen.load('root/images/screen.jpg',
+        function (imageBitmap) {
+            let texture = new THREE.CanvasTexture(imageBitmap);
+            let material = new THREE.MeshBasicMaterial({ map: texture });
+            mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2.78, 1.69), material);
+            scene.add(mesh);
+            mesh.position.y += 1.655;
+            mesh.position.z -= 0.463;
+            mesh.position.x -= 0.31;
+        }, undefined,
+        function (err) {
+            animationDiv.style.display = "none";
+            console.error(err);
+        });
+
     // Load Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.autoRotate = true;
     controls.screenSpacePanning = false;
-    controls.minDistance = 0;
-    controls.maxDistance = 500;
+    controls.minDistance = 1;
+    controls.maxDistance = 300;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
-    controls.addEventListener('change', render);
 
-    // Do animation
+    // Do Animation
     const animate = function () {
         requestAnimationFrame(animate);
-        // if (group) {
-        //     group.rotateY(-0.001);
-        // }
+
         render();
     };
-
     animate();
-}
 
-function render() {
-    renderer.render(scene, camera);
-}
+    function render() {
+        renderer.render(scene, camera);
+    }
 
-function onWindowResize() {
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+        camera.aspect = window.innerWidth / window.innerHeight;
 
-    camera.updateProjectionMatrix();
+        camera.updateProjectionMatrix();
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-    render();
+        render();
+    }
 }

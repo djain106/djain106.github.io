@@ -132,9 +132,22 @@ code {
     text-decoration: underline;
 }
 
+#buttons {
+    display: none;
+    justify-content: center;
+    padding: 5px;
+    position: absolute;
+}
+
+#buttons button {
+    border-radius: 5px;
+    padding: 2px;
+}
+
 @media only screen and (max-width: 650px) {
+
     .content {
-        width: 100%;
+        width: 90%;
     }
 
     hr {
