@@ -60,18 +60,19 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     const animationDiv = document.getElementById("animation");
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 30;
+    renderer.toneMappingExposure = 1;
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.setSize(WIDTH, HEIGHT);
     renderer.physicallyCorrectLights = true;
+    renderer.shadowMap.enabled = true;
     animationDiv.appendChild(renderer.domElement);
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.01, 500);
-    camera.position.set(0, 10, 0);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(1, 2, 2);
+    camera.lookAt(100, 0, 0);
 
     // Scene
     scene = new THREE.Scene();
@@ -79,46 +80,42 @@ function init() {
     scene.background = backgroundColor;
 
     const loader = new THREE.GLTFLoader();
-
-    loader.load('root/assets/room.gltf', function (gltf) {
+    let group;
+    loader.load('root/donut/just_donut.gltf', function (gltf) {
         const scale = new THREE.Vector3(10, 10, 10);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         scene.add(gltf.scene);
         render();
+        group = gltf.scene;
         document.getElementById('activate_animation').style.display = "inline";
-        // console.log(gltf.cameras[1]);
-        // camera = gltf.cameras[1].clone();
     }, undefined, function (error) {
-        console.log('failed')
+        console.log('failed');
         console.error(error);
     });
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    // controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
     controls.autoRotate = true;
-    controls.dampingFactor = 0.05;
     controls.screenSpacePanning = false;
     controls.minDistance = 0;
     controls.maxDistance = 500;
     controls.update();
 
-    controls.addEventListener('change', render);
     render();
-    // camera.position.z = 20;
+    controls.addEventListener('change', render);
 
-    // const animate = function () {
-    //     requestAnimationFrame(animate);
-    //     sphere.rotation.x += 0.01;
-    //     sphere.rotation.y += 0.01;
+    const animate = function () {
+        requestAnimationFrame(animate);
+        if (group) {
+            group.rotateY(-0.001);
+        }
 
-    //     renderer.render(scene, camera);
-    // };
+        renderer.render(scene, camera);
+    };
 
-    // animate();
+    animate();
 }
 
-function render() { // to allow for very bright scenes.
-    renderer.shadowMap.enabled = true;
+function render() {
     renderer.render(scene, camera);
 }
 
