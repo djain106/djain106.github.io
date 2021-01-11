@@ -96,13 +96,14 @@ code {
     font-size: 20px;
 }
 
-.projects {
+.section_title {
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin-left: auto;
     margin-right: auto;
     color: #006;
+    margin-bottom: 15px;
 }
 
 .project {
@@ -112,12 +113,12 @@ code {
     margin-top: 20px;
 }
 
-.projects a {
+.section_title a {
     color: black;
     text-decoration: underline dotted black !important;
 }
 
-.projects p a {
+.section_title p a {
     color: #006;
     text-decoration: underline #006 !important;
 }
