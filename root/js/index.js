@@ -121,22 +121,17 @@ function init() {
     scene.add(gridHelper);
 
     // Screen
-    const screen = new THREE.ImageBitmapLoader();
-    screen.setOptions({ imageOrientation: 'flipY' });
-    screen.load('root/images/screen.jpg',
-        function (imageBitmap) {
-            let texture = new THREE.CanvasTexture(imageBitmap);
-            let material = new THREE.MeshBasicMaterial({ map: texture });
-            mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(2.78, 1.69), material);
-            scene.add(mesh);
-            mesh.position.y += 1.655;
-            mesh.position.z -= 0.463;
-            mesh.position.x -= 0.31;
-        }, undefined,
-        function (err) {
-            animationDiv.style.display = "none";
-            console.error(err);
-        });
+    function callbackScreen() {
+        const geometry = new THREE.PlaneBufferGeometry(2.78, 1.69);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffffff, map: screen });
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+        mesh.position.y += 1.655;
+        mesh.position.z -= 0.463;
+        mesh.position.x -= 0.31;
+    }
+    const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
+
 
     // Load Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
