@@ -71,8 +71,7 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.01, 500);
-    camera.position.set(1, 2, 2);
-    camera.lookAt(100, 0, 0);
+    camera.position.set(20, 12, 12);
 
     // Scene
     scene = new THREE.Scene();
@@ -81,7 +80,8 @@ function init() {
 
     const loader = new THREE.GLTFLoader();
     let group;
-    loader.load('root/donut/just_donut.gltf', function (gltf) {
+    loader.load('root/assets/scene.gltf', function (gltf) {
+        // Desktop Computer by Tyler P Halterman is licensed under Creative Commons Attribution
         const scale = new THREE.Vector3(10, 10, 10);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         scene.add(gltf.scene);
@@ -89,7 +89,7 @@ function init() {
         group = gltf.scene;
         document.getElementById('activate_animation').style.display = "inline";
     }, undefined, function (error) {
-        console.log('failed');
+        console.log('Loading alternative animation...');
         console.error(error);
     });
 
