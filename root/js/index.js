@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     type();
     init();
     document.getElementById('activate_animation').onclick = activateAnimation;
-    document.getElementById('buttons').onclick = hideAnimation;
+    document.getElementById('controls').onclick = hideAnimation;
 }, false);
 
 // Highlight code block with JS syntax
@@ -32,12 +32,12 @@ function type() {
 
 function activateAnimation() {
     document.getElementById('content').style.display = 'none';
-    document.getElementById('buttons').style.display = 'flex';
+    document.getElementById('controls').style.display = 'inline';
 }
 
 function hideAnimation() {
     document.getElementById('content').style.display = '';
-    document.getElementById('buttons').style.display = 'none';
+    document.getElementById('controls').style.display = 'none';
 }
 
 // Three JS animation

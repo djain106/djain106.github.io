@@ -6,8 +6,7 @@
 }
 
 body {
-    background-color: rgb(32, 32, 32);
-    /*#4BB;*/
+    background-color: #4BB;
     font-family: 'Roboto Mono', monospace;
     color: rgb(243, 233, 210);
     margin: 0;
@@ -109,7 +108,7 @@ code {
 .section-container {
     background-color: rgb(243, 233, 210);
     border-radius: 10px;
-    padding: 15px 25px;
+    padding: 15px 15px 0px 15px;
     margin-top: 20px;
 }
 
@@ -132,14 +131,14 @@ code {
     text-decoration: underline;
 }
 
-#buttons {
+#controls {
     display: none;
-    justify-content: center;
     padding: 5px;
     position: absolute;
+    left: 50%;
 }
 
-#buttons button {
+#controls button {
     border-radius: 5px;
     padding: 2px;
 }
