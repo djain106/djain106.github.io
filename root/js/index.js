@@ -1,19 +1,4 @@
 let mesh, renderer, scene, camera, controls;
-// if (window.DeviceOrientationEvent) {
-//     window.addEventListener("deviceorientation", handleOrientation, true);
-// }
-
-// function handleOrientation(event) {
-//     var alpha = Math.abs(event.alpha);
-//     var beta = Math.abs(event.beta);
-//     var gamma = Math.abs(event.gamma);
-//     const page = document.body;
-//     if (!alpha && !beta && !gamma) {
-//         return;
-//     }
-//     var r = alpha * (255 / 360) % 255, g = beta * (255 / 360) % 255, b = gamma * (255 / 360) % 255;
-//     page.style.backgroundColor = `rgb(${r + "," + g + "," + b})`;
-// }
 
 document.addEventListener('DOMContentLoaded', function () {
     highlight();
@@ -71,45 +56,80 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.01, 500);
-    camera.position.set(20, 12, 12);
+    camera.position.set(4, 6, 4);
 
     // Scene
     scene = new THREE.Scene();
     const backgroundColor = new THREE.Color("rgb(10, 10, 10)");
     scene.background = backgroundColor;
+    const fog = new THREE.Fog({ color: "white" });
+    scene.fog = fog;
 
+    // Load Computer
     const loader = new THREE.GLTFLoader();
     let group;
     loader.load('root/assets/scene.gltf', function (gltf) {
         // Desktop Computer by Tyler P Halterman is licensed under Creative Commons Attribution
-        const scale = new THREE.Vector3(10, 10, 10);
+        const scale = new THREE.Vector3(2, 2, 2);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         scene.add(gltf.scene);
         render();
         group = gltf.scene;
+        group.position.y += 1.285;
+        group.traverse(function (object) {
+            if (object.isMesh) object.castShadow = true;
+        });
         document.getElementById('activate_animation').style.display = "inline";
     }, undefined, function (error) {
         console.log('Loading alternative animation...');
         console.error(error);
     });
 
+    // Light
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+    hemiLight.position.set(0, 20, 0);
+    scene.add(hemiLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff);
+    dirLight.position.set(3, 10, 10);
+    dirLight.castShadow = true;
+    dirLight.shadow.camera.top = 2;
+    dirLight.shadow.camera.bottom = - 2;
+    dirLight.shadow.camera.left = - 2;
+    dirLight.shadow.camera.right = 2;
+    dirLight.shadow.camera.near = 0.1;
+    dirLight.shadow.camera.far = 40;
+    scene.add(dirLight);
+
+    // Ground
+    const mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(50, 50), new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false }));
+    mesh.rotation.x = - Math.PI / 2;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+
+    // Grid
+    const size = 50;
+    const divisions = 50;
+
+    const gridHelper = new THREE.GridHelper(size, divisions);
+    scene.add(gridHelper);
+
+    // Load Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.autoRotate = true;
     controls.screenSpacePanning = false;
     controls.minDistance = 0;
     controls.maxDistance = 500;
     controls.update();
-
-    render();
     controls.addEventListener('change', render);
 
+    // Do animation
     const animate = function () {
         requestAnimationFrame(animate);
         if (group) {
             group.rotateY(-0.001);
         }
-
-        renderer.render(scene, camera);
+        render();
     };
 
     animate();
