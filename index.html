@@ -31,62 +31,88 @@
     <div id="animation"></div>
     <div class="content">
         <div class="header">
-            <h1 class="name">Daksh Jain</h1>
+            <header class="name">Daksh Jain</header>
             <hr>
             <div class="icons">
-                <a href="https://github.com/djain106" alt="GitHub"><i class="fab fa-github-square"></i>github/</a>
-                <a href="https://www.linkedin.com/in/daksh-j/" alt="LinkedIn"><i class="fab fa-linkedin"></i>linkedin/
-                </a>
-                <a href="https://djain.dev/resume.pdf" alt="Resume"><i class="fas fa-file"></i>resume/</a>
-                <p id="activate_animation" onclick="activateAnimation()"><i class="fas fa-mouse"></i>play/</p>
+                <a href="https://github.com/djain106" alt="GitHub"><i class="fab fa-github-square"></i>github</a>/
+                <a href="https://www.linkedin.com/in/daksh-j/" alt="LinkedIn"><i
+                        class="fab fa-linkedin"></i>linkedin</a>/
+                <a href="https://djain.dev/resume.pdf" alt="Resume"><i class="fas fa-file"></i>resume</a>/
+                <p id="activate_animation" onclick="activateAnimation()"><i class="fas fa-play"></i>play</p>/
             </div>
         </div>
         <div class="intro-code">
             <h2>aboutMe.js</h2>
             <pre><code class="lang-js">> const DAKSH_JAIN = <span id="typed" style="color: #D69D85;"></span>;
         <br>> var interests = ["Software Engineering", "Machine Learning", "Fullstack Development"];
-        <br>> var now = "Working on Gambit!"; <a style="text-decoration: none;" href="https://github.com/djain106/gambit">//Click Me!</span></a>
+        <br>> var now = ["This Page", "Working on Gambit!"]; <a style="text-decoration: none;" href="https://github.com/djain106/gambit">//Click Me!</span></a>
         
         </div>
-        <section class="section_title">
+        <section class="section-title">
             <h1 class="page-section">Projects</h1>
-            <article id="1" class="project">
-                <h2><a href="https://github.com/djain106/gambit">Gambit</a></h2>
+            <article id="1" class="section-container">
+                <h2><a href="https://github.com/djain106/gambit">Gambit</a><i style="float: right;" class="fas fa-dice"></i></h2>
                 <p><span class="underline">Technologies</span>: MongoDB, Express, React, Node
                     <br><span class="underline">Languages</span>: JavaScript, HTML, CSS
                     <br><span class="underline">About</span>: A React application that I used to teach myself more
-                    about
-                    modern day frameworks and how to create my own fullstack applications. This projects implements
-                    user authentication through login and has common gambling games including BlackJack,
-                    Roulette, and Slots.
+                    about modern day frameworks and how to create my own fullstack applications. This projects implements
+                    user authentication through login and has common gambling games including BlackJack, Roulette, and Slots.
+                    I learned how to use hook based React to manage contexts and other state variables within the application. 
+                    I also implemented JWT authentication in cookies to persist a user login throughout their time on the application.
+                    My goal is to eventually deploy this website as a platform for people to enjoy playing these games without ever
+                    taking on the risk of losing money!
                 </p>
             </article>
-            <article id="2" class="project">
-                <h2><a href="https://github.com/djain106/tf-idf">TF-IDF</a></h2>
+            <article id="2" class="section-container">
+                <h2><a href="https://github.com/djain106/tf-idf">TF-IDF</a><i style="float: right;" class="fas fa-search"></i></h2>
                 <p>
                     <span class="underline">Languages</span>: Python
                     <br><span class="underline">About</span>: This project implements the <a class="underline"
-                        href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Term Frequency - Inverse Document
-                        Frequency</a> search algorithm on provided text documents. This algorithm weights words
-                    based on
-                    the number of times it appears in the document with the inverse of the times the word appears in
-                    the
-                    total collection of documents.
+                    href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">Term Frequency - Inverse Document
+                    Frequency</a> search algorithm on provided text documents. This algorithm weights words
+                    based on the number of times it appears in the document with the inverse of the times the word appears in
+                    the total collection of documents. Although this search algorithm is not the bleeding edge of today's search algorithms such as PageRank, 
+                    it provides a simple, yet effective technique for determining the most relevant document/pages from a user's search.
                 </p>
             </article>
-            <article id="3" class="project">
-                <h2><a href="https://github.com/djain106/webnote">WebNote</a></h2>
+            <article id="3" class="section-container">
+                <h2><a href="https://github.com/djain106/webnote">WebNote</a><i style="float: right;" class="far fa-sticky-note"></i></h2>
                 <p>
                     <span class="underline">Languages</span>: JavaScript
                     <br><span class="underline">About</span>: This project is a chrome extension that allows users to
                     save "sticky notes" based on the domain they are currently on. It is also enabled with Google Chrome
                     Sync, meaning a sticky note saved on the user's desktop will also appear on their laptop or other
-                    computers where the user is signed in.
+                    computers where the user is signed in. For example, it may be helpful for jotting notes from Wikipedia in your browswer without
+                    having to switch to another application like Microsoft Word. Also, the user can simply come back to www.wikpedia.org on the original
+                    or different computer, and use or continue taking more notes. 
+
+                </p>
+            </article>
+            <article id="4" class="section-container">
+                <h2><a href="">Disbiome Analysis</a><i style="float: right;" class="fas fa-calculator"></i></h2>
+                <p>
+                    <span class="underline">Technologies</span>: SciKit-Learn or TensorFlow
+                    <br><span class="underline">Languages</span>: MATLAB, Python
+                    <br><span class="underline">About</span>: During a statistics course called Random Variability in Chemical Processes, I learned about
+                    the <a class="underline" href="https://disbiome.ugent.be/home">Disbiome Database</a> which stores data about "microbial composition changes in different kinds
+                    of disease." After speaking with a professor about this topic more, I learned more about the possible correlation that may exist between the 
+                    microbiome of a person and the likeliness/chance they may have a disease. So far, I have used MATLAB to create a prelimenary identifier that 
+                    detects if there is a positive, negative, or no correlation between the data. From these results, there seems to be some trends towards certain
+                    microbes having a strong correlation between the probability the person will acquire an illness. 
                 </p>
             </article>
         </section>
-        <div class="section_title">
-            <h1 class="page-section">Contact Me!</h1>
+        <div class="section-title">
+            <h1 class="page-section">Experience</h1>
+            <div class="section-container">
+
+            </div>
+        </div>
+        <div class="section-title">
+            <h1 class="page-section">Contact</h1>
+            <form class="section-container">
+
+            </form>
         </div>
     </div>
 </body>

@@ -126,9 +126,9 @@ function init() {
     // Do animation
     const animate = function () {
         requestAnimationFrame(animate);
-        if (group) {
-            group.rotateY(-0.001);
-        }
+        // if (group) {
+        //     group.rotateY(-0.001);
+        // }
         render();
     };
 

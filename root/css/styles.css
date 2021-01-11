@@ -96,7 +96,7 @@ code {
     font-size: 20px;
 }
 
-.section_title {
+.section-title {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -106,21 +106,21 @@ code {
     margin-bottom: 15px;
 }
 
-.project {
+.section-container {
     background-color: rgb(243, 233, 210);
     border-radius: 10px;
     padding: 15px 25px;
     margin-top: 20px;
 }
 
-.section_title a {
+.section-container a {
     color: black;
     text-decoration: underline dotted black !important;
 }
 
-.section_title p a {
+.section-container p a {
     color: #006;
-    text-decoration: underline #006 !important;
+    text-decoration: underline dotted #006 !important;
 }
 
 .page-section {
