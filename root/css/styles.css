@@ -141,6 +141,8 @@ code {
 #controls button {
     border-radius: 5px;
     padding: 2px;
+    left: -50%;
+    position: relative;
 }
 
 @media only screen and (max-width: 650px) {

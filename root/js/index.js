@@ -1,20 +1,38 @@
 
 // Constants
 const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
-// Variables
+// Global Variables
 let mesh, renderer, scene, camera, controls, stats;
 
+// Computer Screen Rendering
+var screenScene, screenCamera, firstRenderTarget, finalRenderTarget;
 var MovingCube, textureCamera;
 
-var screenScene, screenCamera, firstRenderTarget, finalRenderTarget;
+// Screens
+var computerScreen, defaultScreen;
+
+// Car Controls
+var startCarButton, deactivateCarButton;
+var moveForward, moveBackward, moveLeft, moveRight;
+
+// Animation Control
+var doAnimation = false;
+
+// Animation Div
+var animationDiv;
 
 document.addEventListener('DOMContentLoaded', function () {
     highlight();
     type();
+    animationDiv = document.getElementById("animation");
     init();
     animate();
     document.getElementById('activate_animation').onclick = activateAnimation;
-    document.getElementById('controls').onclick = hideAnimation;
+    document.getElementById('close_animation').onclick = hideAnimation;
+    startCarButton = document.getElementById('use_car');
+    startCarButton.onclick = activateCar;
+    deactivateCarButton = document.getElementById('deactivate_car');
+    deactivateCarButton.onclick = deactivateCar;
 }, false);
 
 // Highlight code block with JS syntax
@@ -42,11 +60,19 @@ function type() {
 }
 
 function activateAnimation() {
+    // Stats
+    stats = new Stats();
+    animationDiv.appendChild(stats.domElement);
+
+    // Start Animation
+    doAnimation = true;
+    animate();
     document.getElementById('content').style.display = 'none';
     document.getElementById('controls').style.display = 'inline';
 }
 
 function hideAnimation() {
+    doAnimation = false;
     document.getElementById('content').style.display = '';
     document.getElementById('controls').style.display = 'none';
 }
@@ -58,13 +84,10 @@ function init() {
     scene = new THREE.Scene();
     const backgroundColor = new THREE.Color("rgb(135,206,235)");
     scene.background = backgroundColor;
-    // const fog = new THREE.Fog({ color: "white" });
-    // scene.fog = fog;
 
     // Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
-    const animationDiv = document.getElementById("animation");
     renderer.toneMappingExposure = 1;
     // renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.setSize(WIDTH, HEIGHT);
@@ -72,10 +95,6 @@ function init() {
     animationDiv.appendChild(renderer.domElement);
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
-
-    // Stats
-    stats = new Stats();
-    animationDiv.appendChild(stats.domElement);
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
@@ -101,6 +120,7 @@ function init() {
         });
         scene.add(group);
         document.getElementById('activate_animation').style.display = "inline";
+        render();
     }, undefined, function (error) {
         animationDiv.style.display = "none";
         console.error(error);
@@ -144,7 +164,6 @@ function init() {
     // Grid
     const size = 1000;
     const divisions = 200;
-
     const gridHelper = new THREE.GridHelper(size, divisions);
     scene.add(gridHelper);
 
@@ -152,11 +171,11 @@ function init() {
     function callbackScreen() {
         const geometry = new THREE.PlaneBufferGeometry(2.78, 1.69);
         const material = new THREE.MeshBasicMaterial({ color: 0xffffff, map: screen });
-        const mesh = new THREE.Mesh(geometry, material);
-        // scene.add(mesh);
-        mesh.position.y += 1.655;
-        mesh.position.z -= 0.463;
-        mesh.position.x -= 0.31;
+        defaultScreen = new THREE.Mesh(geometry, material);
+        scene.add(defaultScreen);
+        defaultScreen.position.y += 1.655;
+        defaultScreen.position.z -= 0.463;
+        defaultScreen.position.x -= 0.31;
     }
     const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
 
@@ -186,11 +205,11 @@ function init() {
     var planeMaterial = new THREE.MeshBasicMaterial({
         map: finalRenderTarget.texture
     });
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.position.y += 1.655;
-    plane.position.z -= 0.463;
-    plane.position.x -= 0.31;
-    scene.add(plane);
+    var computerScreen = new THREE.Mesh(planeGeometry, planeMaterial);
+    computerScreen.position.x -= 0.31;
+    computerScreen.position.y += 1.655;
+    computerScreen.position.z -= 0.463;
+    scene.add(computerScreen);
 
     // Load Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -200,7 +219,10 @@ function init() {
     controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
 
+
     window.addEventListener('resize', onWindowResize, false);
+    document.addEventListener('keydown', onKeyDown, false);
+    document.addEventListener('keyup', onKeyUp, false);
 }
 
 function onWindowResize() {
@@ -219,6 +241,9 @@ function update() {
 }
 
 const animate = function () {
+    if (!doAnimation) {
+        return;
+    }
     requestAnimationFrame(animate);
     render();
     update();
@@ -238,4 +263,74 @@ function render() {
     renderer.clear();
 
     renderer.render(scene, camera);
+}
+
+function activateCar() {
+    defaultScreen.visible = false;
+    startCarButton.disabled = true;
+    deactivateCarButton.disabled = false;
+    controls.enabled = false;
+    camera.position.set(-0.31, 1.655, 1.7);
+    camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+}
+
+function deactivateCar() {
+    camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+    defaultScreen.visible = true;
+    startCarButton.disabled = false;
+    deactivateCarButton.disabled = true;
+    controls.enabled = true;
+}
+
+function onKeyDown(event) {
+    if (!doAnimation) {
+        return;
+    };
+    console.log('down')
+    switch (event.keyCode) {
+        case 38: // up
+        case 87: // w
+            moveForward = true;
+            break;
+        case 37: // left
+        case 65: // a
+            moveLeft = true;
+            break;
+        case 40: // down
+        case 84: // s
+            moveBackward = true;
+            break;
+        case 39: // right
+        case 68: // d
+            moveRight = true;
+            break;
+        default:
+            break;
+    }
+}
+
+function onKeyUp(event) {
+    if (!doAnimation) {
+        return;
+    };
+    switch (event.keyCode) {
+        case 38: // up
+        case 87: // w
+            moveForward = false;
+            break;
+        case 37: // left
+        case 65: // a
+            moveLeft = false;
+            break;
+        case 40: // down
+        case 84: // s
+            moveBackward = false;
+            break;
+        case 39: // right
+        case 68: // d
+            moveRight = false;
+            break;
+        default:
+            break;
+    }
 }
