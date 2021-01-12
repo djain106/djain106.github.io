@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     highlight();
     type();
-    init();
+    //init();
     document.getElementById('activate_animation').onclick = activateAnimation;
     document.getElementById('controls').onclick = hideAnimation;
 }, false);
@@ -131,7 +131,6 @@ function init() {
         mesh.position.x -= 0.31;
     }
     const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
-
 
     // Load Controls
     controls = new THREE.OrbitControls(camera, renderer.domElement);
