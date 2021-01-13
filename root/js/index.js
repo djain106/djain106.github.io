@@ -5,19 +5,17 @@ let mesh, renderer, scene, camera, controls, stats;
 
 // Computer Screen Rendering
 var screenScene, screenCamera, firstRenderTarget, finalRenderTarget;
-var MovingSphere, textureCamera;
+var MovingCube, textureCamera;
 
 // Screens
 var computerScreen, defaultScreen;
 var usingCar = false;
+const screenRatio = 1.65;
+const screenHeight = 1000;
 
 // Object Controls
 var startCarButton, deactivateCarButton;
 var keyboard = new THREEx.KeyboardState();
-var clock = new THREE.Clock();
-const velocity = new THREE.Vector3();
-const direction = new THREE.Vector3();
-let prevTime = performance.now();
 var clock = new THREE.Clock();
 
 // Animation Control
@@ -94,7 +92,6 @@ function init() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMappingExposure = 1;
-    // renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -104,14 +101,12 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
-    camera.position.set(4, 6, 4);
+    camera.position.set(4, 6, 3);
     scene.add(camera);
 
     // Texture Camera
     textureCamera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
     textureCamera.position.set(-0.4, 2, -2);
-    // const helper = new THREE.CameraHelper(textureCamera);
-    // scene.add(helper);
     scene.add(textureCamera);
 
     // Load Computer
@@ -154,18 +149,18 @@ function init() {
     scene.add(dirLight);
 
     // Moving Object
-    var MovingSphereMat = new THREE.MeshBasicMaterial({
+    var MovingCubeMat = new THREE.MeshBasicMaterial({
         color: "green",
         wireframe: true
     });
-    var MovingSphereGeom = new THREE.BoxGeometry(1, 1, 1); // new THREE.SphereGeometry(1, 32, 32);
-    MovingSphere = new THREE.Mesh(MovingSphereGeom, MovingSphereMat);
-    MovingSphere.position.set(-0.4, 2, -2);
-    MovingSphere.castShadow = true;
-    scene.add(MovingSphere);
+    var MovingCubeGeom = new THREE.BoxGeometry(1, 1, 1); // new THREE.SphereGeometry(1, 32, 32);
+    MovingCube = new THREE.Mesh(MovingCubeGeom, MovingCubeMat);
+    MovingCube.position.set(-0.4, 2, -2);
+    MovingCube.castShadow = true;
+    scene.add(MovingCube);
 
     // Ground
-    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "darkblue" }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "rgb(180,180,180)" }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
@@ -191,9 +186,8 @@ function init() {
     const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
 
     // Intermediate Scene
-    const screenRatio = 1.65;
-    const screenHeight = 1000;
     screenScene = new THREE.Scene();
+    console.log(HEIGHT);
     screenCamera = new THREE.OrthographicCamera(
         (screenRatio * HEIGHT) / -2, (screenRatio * HEIGHT) / 2,
         HEIGHT / 2, HEIGHT / -2,
@@ -260,12 +254,12 @@ const animate = function () {
 
 function render() {
     if (usingCar) {
-        MovingSphere.visible = false;
+        MovingCube.visible = false;
         renderer.setRenderTarget(firstRenderTarget);
         renderer.render(scene, textureCamera);
         renderer.setRenderTarget(null);
         renderer.clear();
-        MovingSphere.visible = true;
+        MovingCube.visible = true;
 
         renderer.setRenderTarget(finalRenderTarget);
         renderer.render(screenScene, screenCamera);
@@ -281,30 +275,30 @@ function update() {
     var moveDistance = 1 * delta;
     var rotateAngle = Math.PI / 2 * delta;
     if (keyboard.pressed("W"))
-        MovingSphere.translateZ(-moveDistance);
+        MovingCube.translateZ(-moveDistance);
     if (keyboard.pressed("S"))
-        MovingSphere.translateZ(moveDistance);
+        MovingCube.translateZ(moveDistance);
     if (keyboard.pressed("Q"))
-        MovingSphere.translateX(-moveDistance);
+        MovingCube.translateX(-moveDistance);
     if (keyboard.pressed("E"))
-        MovingSphere.translateX(moveDistance);
+        MovingCube.translateX(moveDistance);
 
     if (keyboard.pressed("A"))
-        MovingSphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
+        MovingCube.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
     if (keyboard.pressed("D"))
-        MovingSphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
+        MovingCube.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
     if (keyboard.pressed("R"))
-        MovingSphere.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
+        MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
     if (keyboard.pressed("F"))
-        MovingSphere.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
+        MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
 
     if (keyboard.pressed("Z")) {
-        MovingSphere.position.set(-0.5, 2, -2);
-        MovingSphere.rotation.set(0, 0, 0);
+        MovingCube.position.set(-0.5, 2, -2);
+        MovingCube.rotation.set(0, 0, 0);
     }
 
-    const newPos = MovingSphere.position;
-    const newRot = MovingSphere.rotation;
+    const newPos = MovingCube.position;
+    const newRot = MovingCube.rotation;
     textureCamera.position.set(newPos.x, newPos.y, newPos.z);
     textureCamera.rotation.set(newRot.x, newRot.y, newRot.z);
 }
