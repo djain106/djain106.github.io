@@ -1,4 +1,3 @@
-
 // Constants
 const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
 // Global Variables
@@ -6,14 +5,20 @@ let mesh, renderer, scene, camera, controls, stats;
 
 // Computer Screen Rendering
 var screenScene, screenCamera, firstRenderTarget, finalRenderTarget;
-var MovingCube, textureCamera;
+var MovingSphere, textureCamera;
 
 // Screens
 var computerScreen, defaultScreen;
+var usingCar = false;
 
-// Car Controls
+// Object Controls
 var startCarButton, deactivateCarButton;
-var moveForward, moveBackward, moveLeft, moveRight;
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3();
+let prevTime = performance.now();
+var clock = new THREE.Clock();
 
 // Animation Control
 var doAnimation = false;
@@ -92,6 +97,7 @@ function init() {
     // renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.setSize(WIDTH, HEIGHT);
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     animationDiv.appendChild(renderer.domElement);
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     pmremGenerator.compileEquirectangularShader();
@@ -103,8 +109,10 @@ function init() {
 
     // Texture Camera
     textureCamera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
+    textureCamera.position.set(-0.4, 2, -2);
+    // const helper = new THREE.CameraHelper(textureCamera);
+    // scene.add(helper);
     scene.add(textureCamera);
-    textureCamera.position.set(4, 6, 4);
 
     // Load Computer
     const computer = new THREE.GLTFLoader();
@@ -116,7 +124,10 @@ function init() {
         group = gltf.scene;
         group.position.y += 1.30;
         group.traverse(function (object) {
-            if (object.isMesh) object.castShadow = true;
+            if (object.isMesh) {
+                object.castShadow = true;
+                object.receiveShadow = true;
+            }
         });
         scene.add(group);
         document.getElementById('activate_animation').style.display = "inline";
@@ -127,31 +138,37 @@ function init() {
     });
 
     // Light
+    const light = new THREE.AmbientLight(0x404040);
+    light.intensity = 0.7;
+    scene.add(light);
     const dirLight = new THREE.DirectionalLight(0xffffff);
-    dirLight.position.set(3, 10, 10);
+    dirLight.position.set(3, 20, 20);
     dirLight.castShadow = true;
-    dirLight.shadow.camera.top = 2;
-    dirLight.shadow.camera.bottom = - 2;
-    dirLight.shadow.camera.left = - 2;
-    dirLight.shadow.camera.right = 2;
+    const shadowBox = 3;
+    dirLight.shadow.camera.top = shadowBox;
+    dirLight.shadow.camera.bottom = - shadowBox;
+    dirLight.shadow.camera.left = - shadowBox;
+    dirLight.shadow.camera.right = shadowBox;
     dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 40;
+    dirLight.shadow.camera.far = 50;
     scene.add(dirLight);
 
+    // Moving Object
+    var MovingSphereMat = new THREE.MeshBasicMaterial({
+        color: "green",
+        wireframe: true
+    });
+    var MovingSphereGeom = new THREE.BoxGeometry(1, 1, 1); // new THREE.SphereGeometry(1, 32, 32);
+    MovingSphere = new THREE.Mesh(MovingSphereGeom, MovingSphereMat);
+    MovingSphere.position.set(-0.4, 2, -2);
+    MovingSphere.castShadow = true;
+    scene.add(MovingSphere);
+
     // Ground
-    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "darkblue", depthWrite: false }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "darkblue" }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
-
-    // Moving Object
-    var MovingCubeMat = new THREE.MeshBasicMaterial({
-        color: "green"
-    });
-    var MovingCubeGeom = new THREE.CubeGeometry(2, 2, 2, 1, 1, 1);
-    MovingCube = new THREE.Mesh(MovingCubeGeom, MovingCubeMat);
-    MovingCube.position.set(0, 25.1, 0);
-    scene.add(MovingCube);
 
     // Skybox
     var skyboxMaterial = new THREE.MeshBasicMaterial({
@@ -160,12 +177,6 @@ function init() {
     var skyboxGeom = new THREE.CubeGeometry(5000, 5000, 5000, 1, 1, 1);
     var skybox = new THREE.Mesh(skyboxGeom, skyboxMaterial);
     scene.add(skybox);
-
-    // Grid
-    const size = 1000;
-    const divisions = 200;
-    const gridHelper = new THREE.GridHelper(size, divisions);
-    scene.add(gridHelper);
 
     // Screen
     function callbackScreen() {
@@ -180,15 +191,18 @@ function init() {
     const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
 
     // Intermediate Scene
+    const screenRatio = 1.65;
+    const screenHeight = 1000;
     screenScene = new THREE.Scene();
+    console.log(HEIGHT);
     screenCamera = new THREE.OrthographicCamera(
-        window.innerWidth / -2, window.innerWidth / 2,
-        window.innerHeight / 2, window.innerHeight / -2,
+        (screenRatio * HEIGHT) / -2, (screenRatio * HEIGHT) / 2,
+        HEIGHT / 2, HEIGHT / -2,
         -10000, 10000);
     screenCamera.position.z = 1;
     screenScene.add(screenCamera);
     var screenGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
-    firstRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
+    firstRenderTarget = new THREE.WebGLRenderTarget(screenHeight * screenRatio, screenHeight, {
         format: THREE.RGBFormat
     });
     var screenMaterial = new THREE.MeshBasicMaterial({
@@ -199,7 +213,7 @@ function init() {
 
     // Screen Texture
     var planeGeometry = new THREE.PlaneGeometry(2.78, 1.69)
-    finalRenderTarget = new THREE.WebGLRenderTarget(512, 512, {
+    finalRenderTarget = new THREE.WebGLRenderTarget(screenHeight * screenRatio, screenHeight, {
         format: THREE.RGBFormat
     });
     var planeMaterial = new THREE.MeshBasicMaterial({
@@ -219,10 +233,7 @@ function init() {
     controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
 
-
     window.addEventListener('resize', onWindowResize, false);
-    document.addEventListener('keydown', onKeyDown, false);
-    document.addEventListener('keyup', onKeyUp, false);
 }
 
 function onWindowResize() {
@@ -236,33 +247,67 @@ function onWindowResize() {
     render();
 }
 
-function update() {
-    stats.update();
-}
-
 const animate = function () {
     if (!doAnimation) {
         return;
     }
     requestAnimationFrame(animate);
     render();
-    update();
+    if (usingCar) {
+        update();
+    }
+    stats.update();
 };
 
 function render() {
-    MovingCube.visible = false;
-    renderer.setRenderTarget(firstRenderTarget);
-    renderer.render(scene, textureCamera);
-    renderer.setRenderTarget(null);
-    renderer.clear();
-    MovingCube.visible = true;
+    if (usingCar) {
+        MovingSphere.visible = false;
+        renderer.setRenderTarget(firstRenderTarget);
+        renderer.render(scene, textureCamera);
+        renderer.setRenderTarget(null);
+        renderer.clear();
+        MovingSphere.visible = true;
 
-    renderer.setRenderTarget(finalRenderTarget);
-    renderer.render(screenScene, screenCamera);
-    renderer.setRenderTarget(null);
-    renderer.clear();
+        renderer.setRenderTarget(finalRenderTarget);
+        renderer.render(screenScene, screenCamera);
+        renderer.setRenderTarget(null);
+        renderer.clear();
+    }
 
     renderer.render(scene, camera);
+}
+
+function update() {
+    var delta = clock.getDelta();
+    var moveDistance = 1 * delta;
+    var rotateAngle = Math.PI / 2 * delta;
+    if (keyboard.pressed("W"))
+        MovingSphere.translateZ(-moveDistance);
+    if (keyboard.pressed("S"))
+        MovingSphere.translateZ(moveDistance);
+    if (keyboard.pressed("Q"))
+        MovingSphere.translateX(-moveDistance);
+    if (keyboard.pressed("E"))
+        MovingSphere.translateX(moveDistance);
+
+    if (keyboard.pressed("A"))
+        MovingSphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
+    if (keyboard.pressed("D"))
+        MovingSphere.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
+    if (keyboard.pressed("R"))
+        MovingSphere.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
+    if (keyboard.pressed("F"))
+        MovingSphere.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
+
+    if (keyboard.pressed("Z")) {
+        MovingSphere.position.set(-0.5, 2, -2);
+        MovingSphere.rotation.set(0, 0, 0);
+    }
+
+    const newPos = MovingSphere.position;
+    const newRot = MovingSphere.rotation;
+    textureCamera.position.set(newPos.x, newPos.y, newPos.z);
+    textureCamera.rotation.set(newRot.x, newRot.y, newRot.z);
 }
 
 function activateCar() {
@@ -272,6 +317,7 @@ function activateCar() {
     controls.enabled = false;
     camera.position.set(-0.31, 1.655, 1.7);
     camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+    usingCar = true;
 }
 
 function deactivateCar() {
@@ -280,57 +326,5 @@ function deactivateCar() {
     startCarButton.disabled = false;
     deactivateCarButton.disabled = true;
     controls.enabled = true;
-}
-
-function onKeyDown(event) {
-    if (!doAnimation) {
-        return;
-    };
-    console.log('down')
-    switch (event.keyCode) {
-        case 38: // up
-        case 87: // w
-            moveForward = true;
-            break;
-        case 37: // left
-        case 65: // a
-            moveLeft = true;
-            break;
-        case 40: // down
-        case 84: // s
-            moveBackward = true;
-            break;
-        case 39: // right
-        case 68: // d
-            moveRight = true;
-            break;
-        default:
-            break;
-    }
-}
-
-function onKeyUp(event) {
-    if (!doAnimation) {
-        return;
-    };
-    switch (event.keyCode) {
-        case 38: // up
-        case 87: // w
-            moveForward = false;
-            break;
-        case 37: // left
-        case 65: // a
-            moveLeft = false;
-            break;
-        case 40: // down
-        case 84: // s
-            moveBackward = false;
-            break;
-        case 39: // right
-        case 68: // d
-            moveRight = false;
-            break;
-        default:
-            break;
-    }
+    usingCar = false;
 }
