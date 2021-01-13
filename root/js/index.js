@@ -194,7 +194,6 @@ function init() {
     const screenRatio = 1.65;
     const screenHeight = 1000;
     screenScene = new THREE.Scene();
-    console.log(HEIGHT);
     screenCamera = new THREE.OrthographicCamera(
         (screenRatio * HEIGHT) / -2, (screenRatio * HEIGHT) / 2,
         HEIGHT / 2, HEIGHT / -2,
