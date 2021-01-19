@@ -145,6 +145,10 @@ code {
     position: relative;
 }
 
+#experience ul {
+    margin-left: 15px;
+}
+
 @media only screen and (max-width: 650px) {
 
     .content {
