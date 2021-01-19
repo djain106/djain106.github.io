@@ -187,7 +187,6 @@ function init() {
 
     // Intermediate Scene
     screenScene = new THREE.Scene();
-    console.log(HEIGHT);
     screenCamera = new THREE.OrthographicCamera(
         (screenRatio * HEIGHT) / -2, (screenRatio * HEIGHT) / 2,
         HEIGHT / 2, HEIGHT / -2,
