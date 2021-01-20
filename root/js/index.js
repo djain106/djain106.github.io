@@ -36,7 +36,14 @@ document.addEventListener('DOMContentLoaded', function () {
     startCarButton.onclick = activateCar;
     deactivateCarButton = document.getElementById('deactivate_car');
     deactivateCarButton.onclick = deactivateCar;
+    document.getElementById('contact-button').onclick = formSubmit;
 }, false);
+
+// Form submitted
+function formSubmit() {
+    document.getElementById('thank-you').style.display = 'block';
+    document.getElementById('gform').style.display = 'none';
+}
 
 // Highlight code block with JS syntax
 function highlight() {
@@ -46,7 +53,6 @@ function highlight() {
     document.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightBlock(block);
     });
-
 }
 
 // Typing animation in code block

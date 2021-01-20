@@ -149,6 +149,33 @@ code {
     margin-left: 15px;
 }
 
+#gform input {
+    border: none;
+    border-radius: 5px;
+}
+
+#gform textarea {
+    border: none;
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    resize: none;
+}
+
+#gform {
+    padding-bottom: 10px;
+    align-items: center;
+}
+
+#gform button {
+    padding: 5px;
+    border-radius: 6px;
+    align-self: center;
+    color: white;
+    background: #006;
+    border: none;
+}
+
 @media only screen and (max-width: 650px) {
 
     .content {

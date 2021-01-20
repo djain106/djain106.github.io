@@ -136,11 +136,33 @@
                 </p>
             </div>
         </div>
+        <iframe style="display: none;" name="formSending"></iframe>
         <div class="section-title">
             <h1 class="page-section">Contact</h1>
-            <form class="section-container">
-                <p>Coming Soon!</p>
-            </form>
+            <form class="section-container" id="gform" method="POST" class="pure-form pure-form-stacked" data-email="from_email@example.com"
+            action="https://script.google.com/macros/s/AKfycbz0N2gJDU8ZkRgN4DcxmR1CfZL2f07XcV4NyjaFUaJx5J9Zikk/exec" target="formSending">
+            <h3><i style="float: right;" class="fas fa-address-book"></i></h3>
+            <div style="display: flex;">
+                <div style="margin-right: 10px;">
+                    <label for="name">Your Name: </label>
+                    <input id="name" name="name"/>
+                </div>
+                <div style="margin-right: 10px;">
+                    <label for="email"><em>Your</em> Email Address:</label>
+                    <input id="email" name="email" type="email" value="" required/>
+                </div>
+                <div>
+                <button id="contact-button" class="button-success pure-button button-xlarge">
+                <i class="fa fa-paper-plane"></i>&nbsp;Send
+                </button>
+                </div>
+            </div>
+            <label for="message">Message: </label>
+            <textarea id="message" name="message" rows="10"></textarea>
+        </form>
+        <div id="thank-you" style="display: none;" class="section-container">
+            <p>Thank you for reaching out! I will reach back to you as soon as possible!</p>
+        </div>
         </div>
     </div>
 </body>
