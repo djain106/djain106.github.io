@@ -232,7 +232,7 @@ function init() {
     controls.update();
 
     // Add Room
-    var buildingGeometry = new THREE.BoxGeometry(5, 5, 5);
+    var buildingGeometry = new THREE.BoxGeometry(20, 20, 20);
     var buildingMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     var building = new THREE.Mesh(buildingGeometry, buildingMaterial);
     scene.add(building);
