@@ -118,7 +118,7 @@ function init() {
     // Load Computer
     const computer = new THREE.GLTFLoader();
     let group;
-    computer.load('root/assets/scene.gltf', function (gltf) {
+    computer.load('root/assets/computer/scene.gltf', function (gltf) {
         // Desktop Computer by Tyler P Halterman is licensed under Creative Commons Attribution
         const scale = new THREE.Vector3(2, 2, 2);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
@@ -166,7 +166,7 @@ function init() {
     scene.add(MovingCube);
 
     // Ground
-    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "rgb(180,180,180)" }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "green" }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
@@ -230,6 +230,12 @@ function init() {
     controls.maxDistance = 1000;
     controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
+
+    // Add Room
+    var buildingGeometry = new THREE.BoxGeometry(5, 5, 5);
+    var buildingMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+    scene.add(building);
 
     window.addEventListener('resize', onWindowResize, false);
 }
