@@ -228,7 +228,7 @@ function init() {
     controls.screenSpacePanning = false;
     controls.minDistance = 1;
     controls.maxDistance = 1000;
-    // controls.maxPolarAngle = Math.PI / 2 - 0.05;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
 
     // Add Room
