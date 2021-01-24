@@ -166,7 +166,7 @@ function init() {
     scene.add(MovingCube);
 
     // Ground
-    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "green", side: THREE.DoubleSide }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1100, 1100), new THREE.MeshPhongMaterial({ color: "green", side: THREE.DoubleSide }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
@@ -240,7 +240,9 @@ function init() {
     // Add Buildings
     var buildingGeometry;
     var buildingMaterial = new THREE.MeshBasicMaterial({ color: "black" });
+    var buildingMaterialWireframe = new THREE.MeshBasicMaterial({ color: "gray", wireframe: true });
     var building;
+    var wireframe;
     const buildingLength = 20;
     const buildingWidth = 20;
     const buildingHeight = 40;
@@ -249,10 +251,15 @@ function init() {
             let randomness = Math.random() * 60
             buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
             building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-            building.position.x += x * 30;
-            building.position.z += z * 30;
+            building.position.x += x * 50;
+            building.position.z += z * 50;
             building.position.y += randomness / 2 + 20;
             scene.add(building);
+            wireframe = new THREE.Mesh(buildingGeometry, buildingMaterialWireframe);
+            wireframe.position.x += x * 50;
+            wireframe.position.z += z * 50;
+            wireframe.position.y += randomness / 2 + 20;
+            scene.add(wireframe);
         }
     }
 
