@@ -166,7 +166,7 @@ function init() {
     scene.add(MovingCube);
 
     // Ground
-    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "green" }));
+    mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshPhongMaterial({ color: "green", side: THREE.DoubleSide }));
     mesh.rotation.x = - Math.PI / 2;
     mesh.receiveShadow = true;
     scene.add(mesh);
@@ -228,14 +228,33 @@ function init() {
     controls.screenSpacePanning = false;
     controls.minDistance = 1;
     controls.maxDistance = 1000;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05;
+    // controls.maxPolarAngle = Math.PI / 2 - 0.05;
     controls.update();
 
     // Add Room
-    var buildingGeometry = new THREE.BoxGeometry(20, 20, 20);
-    var buildingMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    var building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-    scene.add(building);
+    var roomGeometry = new THREE.BoxGeometry(20, 20, 20);
+    var roomMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide });
+    var room = new THREE.Mesh(roomGeometry, roomMaterial);
+    scene.add(room);
+
+    // Add Buildings
+    var buildingGeometry;
+    var buildingMaterial = new THREE.MeshBasicMaterial({ color: "black" });
+    var building;
+    const buildingLength = 20;
+    const buildingWidth = 20;
+    const buildingHeight = 40;
+    for (let x = -10; x < 10; x++) {
+        for (let z = -10; z < 10; z++) {
+            let randomness = Math.random() * 60
+            buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
+            building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+            building.position.x += x * 30;
+            building.position.z += z * 30;
+            building.position.y += randomness / 2 + 20;
+            scene.add(building);
+        }
+    }
 
     window.addEventListener('resize', onWindowResize, false);
 }
