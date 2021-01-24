@@ -233,14 +233,13 @@ function init() {
 
     // Add Room
     var roomGeometry = new THREE.BoxGeometry(20, 20, 20);
-    var roomMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide });
+    var roomMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide, flatShading: true });
     var room = new THREE.Mesh(roomGeometry, roomMaterial);
     scene.add(room);
 
     // Add Buildings
     var buildingGeometry;
-    var buildingMaterial = new THREE.MeshBasicMaterial({ color: "black" });
-    var buildingMaterialWireframe = new THREE.MeshBasicMaterial({ color: "gray", wireframe: true });
+    var buildingMaterial = new THREE.MeshPhongMaterial({ color: "gray", flatShading: true });
     var building;
     var wireframe;
     const buildingLength = 20;
@@ -248,18 +247,13 @@ function init() {
     const buildingHeight = 40;
     for (let x = -10; x < 10; x++) {
         for (let z = -10; z < 10; z++) {
-            let randomness = Math.random() * 60
+            let randomness = Math.random() * 60;
             buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
             building = new THREE.Mesh(buildingGeometry, buildingMaterial);
             building.position.x += x * 50;
             building.position.z += z * 50;
             building.position.y += randomness / 2 + 20;
             scene.add(building);
-            wireframe = new THREE.Mesh(buildingGeometry, buildingMaterialWireframe);
-            wireframe.position.x += x * 50;
-            wireframe.position.z += z * 50;
-            wireframe.position.y += randomness / 2 + 20;
-            scene.add(wireframe);
         }
     }
 
@@ -309,8 +303,11 @@ function render() {
 
 function update() {
     var delta = clock.getDelta();
-    var moveDistance = 1 * delta;
+    var moveDistance = 10 * delta;
     var rotateAngle = Math.PI / 2 * delta;
+    if (keyboard.pressed("shift"))
+        moveDistance *= 10;
+
     if (keyboard.pressed("W"))
         MovingCube.translateZ(-moveDistance);
     if (keyboard.pressed("S"))
@@ -324,12 +321,16 @@ function update() {
         MovingCube.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
     if (keyboard.pressed("D"))
         MovingCube.rotateOnAxis(new THREE.Vector3(0, 1, 0), -rotateAngle);
-    if (keyboard.pressed("R"))
-        MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
-    if (keyboard.pressed("F"))
-        MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
-
-    if (keyboard.pressed("Z")) {
+    // if (keyboard.pressed("R"))
+    //     MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
+    // if (keyboard.pressed("F"))
+    //     MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
+    if (keyboard.pressed("space"))
+        MovingCube.translateY(moveDistance);
+    if (keyboard.pressed("ctrl") && MovingCube.position.y > 0.5)
+        MovingCube.translateY(-moveDistance);
+    console.log(MovingCube.position.y);
+    if (keyboard.pressed("R")) {
         MovingCube.position.set(-0.5, 2, -2);
         MovingCube.rotation.set(0, 0, 0);
     }
