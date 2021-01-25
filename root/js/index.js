@@ -14,7 +14,7 @@ const screenRatio = 1.65;
 const screenHeight = 1000;
 
 // Object Controls
-var startCarButton, deactivateCarButton;
+var startCarButton, deactivateCarButton, helpCarButton;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 
@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
     startCarButton.onclick = activateCar;
     deactivateCarButton = document.getElementById('deactivate_car');
     deactivateCarButton.onclick = deactivateCar;
+    helpCarButton = document.getElementById('controls_help');
+    helpCarButton.onclick = toggleHelp;
     document.getElementById('contact-button').onclick = formSubmit;
 }, false);
 
@@ -329,12 +331,11 @@ function update() {
         MovingCube.translateY(moveDistance);
     if (keyboard.pressed("ctrl") && MovingCube.position.y > 0.5)
         MovingCube.translateY(-moveDistance);
-    console.log(MovingCube.position.y);
+
     if (keyboard.pressed("R")) {
         MovingCube.position.set(-0.5, 2, -2);
         MovingCube.rotation.set(0, 0, 0);
     }
-
     const newPos = MovingCube.position;
     const newRot = MovingCube.rotation;
     textureCamera.position.set(newPos.x, newPos.y, newPos.z);
@@ -343,19 +344,25 @@ function update() {
 
 function activateCar() {
     defaultScreen.visible = false;
-    startCarButton.disabled = true;
-    deactivateCarButton.disabled = false;
+    startCarButton.hidden = true;
+    deactivateCarButton.hidden = false;
     controls.enabled = false;
     camera.position.set(-0.31, 1.655, 1.7);
     camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+    helpCarButton.hidden = false;
     usingCar = true;
 }
 
 function deactivateCar() {
     camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
     defaultScreen.visible = true;
-    startCarButton.disabled = false;
-    deactivateCarButton.disabled = true;
     controls.enabled = true;
     usingCar = false;
+    startCarButton.hidden = false;
+    deactivateCarButton.hidden = true;
+    helpCarButton.hidden = true;
+}
+
+function toggleHelp() {
+
 }
