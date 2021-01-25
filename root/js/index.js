@@ -173,6 +173,8 @@ function init() {
         const scale = new THREE.Vector3(0.1, 0.1, 0.1);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         MovingCube = gltf.scene;
+        MovingCube.position.z -= 0.6;
+        MovingCube.position.x -= 4;
         scene.add(MovingCube);
         render();
     }, undefined, function (error) {
