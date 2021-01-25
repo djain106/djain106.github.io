@@ -1,0 +1,2 @@
+# Portfolio Website
+This is my repository for my personal website at [djain.dev](http://djain.dev/). This website uses three.js to create the background animations and the scene that is created. You can find all my projects/experience at this link for showing my progress in learning.
