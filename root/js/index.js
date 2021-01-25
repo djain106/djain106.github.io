@@ -157,15 +157,28 @@ function init() {
     scene.add(dirLight);
 
     // Moving Object
-    var MovingCubeMat = new THREE.MeshBasicMaterial({
-        color: "green",
-        wireframe: true
+    // var MovingCubeMat = new THREE.MeshPhongMaterial({
+    //     color: "white",
+    //     flatShading: true
+    // });
+    // var MovingCubeGeom = new THREE.BoxGeometry(1, 1, 1); // new THREE.SphereGeometry(1, 32, 32);
+    // MovingCube = new THREE.Mesh(MovingCubeGeom, MovingCubeMat);
+    // MovingCube.position.set(-0.4, 2, -2);
+    // MovingCube.castShadow = true;
+    // scene.add(MovingCube);
+
+    const planeLoader = new THREE.GLTFLoader();
+    planeLoader.load('root/assets/airplane/scene.gltf', function (gltf) {
+        // "Airplane" (https://skfb.ly/6WXnK) by Omar_Mohamed is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+        const scale = new THREE.Vector3(0.1, 0.1, 0.1);
+        gltf.scene.scale.set(scale.x, scale.y, scale.z);
+        MovingCube = gltf.scene;
+        scene.add(MovingCube);
+        render();
+    }, undefined, function (error) {
+        animationDiv.style.display = "none";
+        console.error(error);
     });
-    var MovingCubeGeom = new THREE.BoxGeometry(1, 1, 1); // new THREE.SphereGeometry(1, 32, 32);
-    MovingCube = new THREE.Mesh(MovingCubeGeom, MovingCubeMat);
-    MovingCube.position.set(-0.4, 2, -2);
-    MovingCube.castShadow = true;
-    scene.add(MovingCube);
 
     // Ground
     mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(1100, 1100), new THREE.MeshPhongMaterial({ color: "green", side: THREE.DoubleSide }));
@@ -235,28 +248,30 @@ function init() {
 
     // Add Room
     var roomGeometry = new THREE.BoxGeometry(20, 20, 20);
-    var roomMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.BackSide, flatShading: true });
+    var roomMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,0,128)", side: THREE.BackSide, flatShading: true });
     var room = new THREE.Mesh(roomGeometry, roomMaterial);
+    room.position.y += 9.9;
     scene.add(room);
 
     // Add Buildings
     var buildingGeometry;
     var buildingMaterial = new THREE.MeshPhongMaterial({ color: "gray", flatShading: true });
     var building;
-    var wireframe;
+    const buildings = [];
     const buildingLength = 20;
     const buildingWidth = 20;
     const buildingHeight = 40;
-    for (let x = -10; x < 10; x++) {
-        for (let z = -10; z < 10; z++) {
-            let randomness = Math.random() * 60;
-            buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
-            building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-            building.position.x += x * 50;
-            building.position.z += z * 50;
-            building.position.y += randomness / 2 + 20;
-            scene.add(building);
-        }
+    for (let i = 0; i < 100; i++) {
+        let x = Math.random() * 1000 - 500;
+        let z = Math.random() * 1000 - 500;
+        let randomness = Math.random() * 60;
+        buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
+        building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+        building.position.x += x;
+        building.position.z += z;
+        building.position.y += randomness / 2 + 20;
+        scene.add(building);
+        buildings.push(building);
     }
 
     window.addEventListener('resize', onWindowResize, false);
@@ -305,7 +320,7 @@ function render() {
 
 function update() {
     var delta = clock.getDelta();
-    var moveDistance = 10 * delta;
+    var moveDistance = 50 * delta;
     var rotateAngle = Math.PI / 2 * delta;
     if (keyboard.pressed("shift"))
         moveDistance *= 10;
@@ -329,13 +344,15 @@ function update() {
     //     MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
     if (keyboard.pressed("space"))
         MovingCube.translateY(moveDistance);
-    if (keyboard.pressed("ctrl") && MovingCube.position.y > 0.5)
+    if (keyboard.pressed("ctrl") && MovingCube.position.y > 1.5)
         MovingCube.translateY(-moveDistance);
 
     if (keyboard.pressed("R")) {
         MovingCube.position.set(-0.5, 2, -2);
         MovingCube.rotation.set(0, 0, 0);
     }
+    if (MovingCube.position.y < 1.5)
+        MovingCube.position.y = 1.5;
     const newPos = MovingCube.position;
     const newRot = MovingCube.rotation;
     textureCamera.position.set(newPos.x, newPos.y, newPos.z);
