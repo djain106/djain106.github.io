@@ -145,6 +145,13 @@ code {
     position: relative;
 }
 
+#instructions {
+    position: absolute;
+    background: black;
+    padding: 20px;
+    border-radius: 10px;
+}
+
 #experience ul {
     margin-left: 15px;
 }

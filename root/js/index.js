@@ -383,5 +383,5 @@ function deactivateCar() {
 }
 
 function toggleHelp() {
-
+    document.getElementById("instructions").hidden = !document.getElementById("instructions").hidden;
 }
