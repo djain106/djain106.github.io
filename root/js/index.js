@@ -86,6 +86,8 @@ function hideAnimation() {
     doAnimation = false;
     document.getElementById('content').style.display = '';
     document.getElementById('controls').style.display = 'none';
+    if (!document.getElementById('instructions').hidden)
+        toggleHelp();
 }
 
 // Three JS animation
@@ -380,6 +382,8 @@ function deactivateCar() {
     startCarButton.hidden = false;
     deactivateCarButton.hidden = true;
     helpCarButton.hidden = true;
+    if (!document.getElementById('instructions').hidden)
+        toggleHelp();
 }
 
 function toggleHelp() {
