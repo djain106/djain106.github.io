@@ -1,5 +1,8 @@
 // Constants
 const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+const yOffset = 4.47;
+const xOffset = -1;
+const zOffset = -11;
 // Global Variables
 let mesh, renderer, scene, camera, controls, stats;
 
@@ -111,12 +114,12 @@ function init() {
 
     // Camera
     camera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
-    camera.position.set(4, 6, 3);
+    camera.position.set(4 + xOffset, 6 + yOffset, 3 + zOffset);
     scene.add(camera);
 
     // Texture Camera
     textureCamera = new THREE.PerspectiveCamera(50, WIDTH / HEIGHT, 0.1, 20000);
-    textureCamera.position.set(-0.4, 2, -2);
+    textureCamera.position.set(-0.4 + xOffset, 3 + yOffset, -2 + zOffset);
     scene.add(textureCamera);
 
     // Load Computer
@@ -127,7 +130,9 @@ function init() {
         const scale = new THREE.Vector3(2, 2, 2);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         group = gltf.scene;
-        group.position.y += 1.30;
+        group.position.y += 1.30 + yOffset;
+        group.position.x += xOffset;
+        group.position.z += zOffset;
         group.traverse(function (object) {
             if (object.isMesh) {
                 object.castShadow = true;
@@ -175,9 +180,36 @@ function init() {
         const scale = new THREE.Vector3(0.1, 0.1, 0.1);
         gltf.scene.scale.set(scale.x, scale.y, scale.z);
         MovingCube = gltf.scene;
-        MovingCube.position.z -= 0.6;
-        MovingCube.position.x -= 4;
+        MovingCube.position.z += -0.6 + zOffset;
+        MovingCube.position.x += -4 + xOffset;
+        MovingCube.position.y += 0.2 + yOffset;
+        MovingCube.rotateY(Math.PI);
         scene.add(MovingCube);
+        render();
+    }, undefined, function (error) {
+        animationDiv.style.display = "none";
+        console.error(error);
+    });
+
+    // Load Computer
+    const roomLoader = new THREE.GLTFLoader();
+    let roomGroup;
+    roomLoader.load('root/assets/room/room.gltf', function (gltf) {
+        const scale = new THREE.Vector3(6, 6, 6);
+        gltf.scene.scale.set(scale.x, scale.y, scale.z);
+        roomGroup = gltf.scene;
+        roomGroup.position.x += 6.5;
+        roomGroup.position.y += 0.1;
+        roomGroup.rotateY(0.5 * Math.PI);
+        // Opt to not use shadows for this mesh.
+        // roomGroup.traverse(function (object) {
+        //     if (object.isMesh) {
+        //         object.castShadow = true;
+        //         object.receiveShadow = true;
+        //     }
+        // });
+        scene.add(roomGroup);
+        document.getElementById('activate_animation').style.display = "inline";
         render();
     }, undefined, function (error) {
         animationDiv.style.display = "none";
@@ -204,9 +236,9 @@ function init() {
         const material = new THREE.MeshBasicMaterial({ color: 0xffffff, map: screen });
         defaultScreen = new THREE.Mesh(geometry, material);
         scene.add(defaultScreen);
-        defaultScreen.position.y += 1.655;
-        defaultScreen.position.z -= 0.463;
-        defaultScreen.position.x -= 0.31;
+        defaultScreen.position.y += 1.655 + yOffset;
+        defaultScreen.position.z += -0.463 + zOffset;
+        defaultScreen.position.x += -0.31 + xOffset;
     }
     const screen = new THREE.TextureLoader().load('root/images/screen.jpg', callbackScreen);
 
@@ -216,7 +248,9 @@ function init() {
         (screenRatio * HEIGHT) / -2, (screenRatio * HEIGHT) / 2,
         HEIGHT / 2, HEIGHT / -2,
         -10000, 10000);
-    screenCamera.position.z = 1;
+    screenCamera.position.z = 1 + zOffset;
+    screenCamera.position.y += yOffset;
+    screenCamera.position.x += xOffset;
     screenScene.add(screenCamera);
     var screenGeometry = new THREE.PlaneGeometry(window.innerWidth, window.innerHeight);
     firstRenderTarget = new THREE.WebGLRenderTarget(screenHeight * screenRatio, screenHeight, {
@@ -237,9 +271,9 @@ function init() {
         map: finalRenderTarget.texture
     });
     var computerScreen = new THREE.Mesh(planeGeometry, planeMaterial);
-    computerScreen.position.x -= 0.31;
-    computerScreen.position.y += 1.655;
-    computerScreen.position.z -= 0.463;
+    computerScreen.position.x += -0.31 + xOffset;
+    computerScreen.position.y += 1.655 + yOffset;
+    computerScreen.position.z += -0.463 + zOffset;
     scene.add(computerScreen);
 
     // Load Controls
@@ -251,32 +285,33 @@ function init() {
     controls.update();
 
     // Add Room
-    var roomGeometry = new THREE.BoxGeometry(20, 20, 20);
-    var roomMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,0,128)", side: THREE.BackSide, flatShading: true });
-    var room = new THREE.Mesh(roomGeometry, roomMaterial);
-    room.position.y += 9.9;
-    scene.add(room);
+    // var roomGeometry = new THREE.BoxGeometry(20, 20, 20);
+    // var roomMaterial = new THREE.MeshBasicMaterial({ color: "rgb(0,0,128)", side: THREE.BackSide, flatShading: true });
+    // var room = new THREE.Mesh(roomGeometry, roomMaterial);
+    // room.position.y += 9.9;
+    // scene.add(room);
 
     // Add Buildings
-    var buildingGeometry;
-    var buildingMaterial = new THREE.MeshPhongMaterial({ color: "gray", flatShading: true });
-    var building;
-    const buildings = [];
-    const buildingLength = 20;
-    const buildingWidth = 20;
-    const buildingHeight = 40;
-    for (let i = 0; i < 100; i++) {
-        let x = Math.random() * 1000 - 500;
-        let z = Math.random() * 1000 - 500;
-        let randomness = Math.random() * 60;
-        buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
-        building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-        building.position.x += x;
-        building.position.z += z;
-        building.position.y += randomness / 2 + 20;
-        scene.add(building);
-        buildings.push(building);
-    }
+    // Temporarily remove buildings for room render.
+    // var buildingGeometry;
+    // var buildingMaterial = new THREE.MeshPhongMaterial({ color: "gray", flatShading: true });
+    // var building;
+    // const buildings = [];
+    // const buildingLength = 20;
+    // const buildingWidth = 20;
+    // const buildingHeight = 40;
+    // for (let i = 0; i < 100; i++) {
+    //     let x = Math.random() * 1000 - 500;
+    //     let z = Math.random() * 1000 - 500;
+    //     let randomness = Math.random() * 60;
+    //     buildingGeometry = new THREE.BoxGeometry(buildingWidth, buildingHeight + randomness, buildingLength);
+    //     building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+    //     building.position.x += x;
+    //     building.position.z += z;
+    //     building.position.y += randomness / 2 + 20;
+    //     scene.add(building);
+    //     buildings.push(building);
+    // }
 
     window.addEventListener('resize', onWindowResize, false);
 }
@@ -368,14 +403,14 @@ function activateCar() {
     startCarButton.hidden = true;
     deactivateCarButton.hidden = false;
     controls.enabled = false;
-    camera.position.set(-0.31, 1.655, 1.7);
-    camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+    camera.position.set(-0.31 + xOffset, 1.655 + yOffset, 1.7 + zOffset);
+    camera.lookAt(new THREE.Vector3(-0.31 + xOffset, 1.655 + yOffset, -0.463 + zOffset));
     helpCarButton.hidden = false;
     usingCar = true;
 }
 
 function deactivateCar() {
-    camera.lookAt(new THREE.Vector3(-0.31, 1.655, -0.463));
+    camera.lookAt(new THREE.Vector3(-0.31 + xOffset, 1.655 + yOffset, -0.463 + zOffset));
     defaultScreen.visible = true;
     controls.enabled = true;
     usingCar = false;
