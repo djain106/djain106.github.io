@@ -64,7 +64,7 @@ function type() {
         typeSpeed: 90,
         backSpeed: 70,
         loop: true,
-        smartBackspace: false,
+        smartBackspace: true,
     };
 
     var typed = new Typed('#typed', options);
